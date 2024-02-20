@@ -1,24 +1,24 @@
-const chalk = require('chalk');
-const figures = require('figures');
-const https = require('https');
-const themekit = require('@shopify/themekit').command;
-const slateEnv = require('@shopify/slate-env');
-const SlateConfig = require('@shopify/slate-config');
+const chalk = require("chalk");
+const figures = require("figures");
+const https = require("https");
+const themekit = require("@shopify/themekit");
+const slateEnv = require("@shopify/slate-env");
+const SlateConfig = require("@shopify/slate-config");
 
-const config = new SlateConfig(require('./slate-sync.schema'));
+const config = new SlateConfig(require("./slate-sync.schema"));
 
 let deploying = false;
 let filesToDeploy = [];
 
 function maybeDeploy() {
   if (deploying) {
-    return Promise.reject(new Error('Deploy already in progress.'));
+    return Promise.reject(new Error("Deploy already in progress."));
   }
 
   if (filesToDeploy.length) {
     const files = [...filesToDeploy];
     filesToDeploy = [];
-    return deploy('upload', files);
+    return deploy("upload", files);
   }
 
   return Promise.resolve();
@@ -41,32 +41,28 @@ function _validateEnvValues() {
   }
 }
 
-function _generateConfigFlags() {
+function _generateConfigFlags(cmd) {
   _validateEnvValues();
 
   const flags = {
-    '--password': slateEnv.getPasswordValue(),
-    '--themeid': slateEnv.getThemeIdValue(),
-    '--store': slateEnv.getStoreValue(),
-    '--env': slateEnv.getEnvNameValue(),
+    password: slateEnv.getPasswordValue(),
+    themeid: slateEnv.getThemeIdValue(),
+    store: slateEnv.getStoreValue(),
+    env: slateEnv.getEnvNameValue(),
   };
+
+  if (cmd === "upload") {
+    flags.nodelete = true;
+  }
+
   if (slateEnv.getTimeoutValue()) {
-    flags['--timeout'] = slateEnv.getTimeoutValue();
+    flags.timeout = slateEnv.getTimeoutValue();
+  }
+  if (slateEnv.getIgnoreFilesValue()) {
+    flags.ignoredFiles = slateEnv.getIgnoreFilesValue().split(":");
   }
 
   // Convert object to key value pairs and flatten the array
-  return Array.prototype.concat(...Object.entries(flags));
-}
-
-function _generateIgnoreFlags() {
-  const ignoreFiles = slateEnv.getIgnoreFilesValue().split(':');
-  const flags = [];
-
-  ignoreFiles.forEach((pattern) => {
-    flags.push('--ignored-file');
-    flags.push(pattern);
-  });
-
   return flags;
 }
 
@@ -77,8 +73,8 @@ function _generateIgnoreFlags() {
  * @param   files   Array     An array of files to deploy
  * @return          Promise
  */
-async function deploy(cmd = '', files = []) {
-  if (!['upload', 'replace'].includes(cmd)) {
+async function deploy(cmd = "", files = []) {
+  if (!["upload", "replace"].includes(cmd)) {
     throw new Error(
       'shopify-deploy.deploy() first argument must be either "upload", "replace"',
     );
@@ -89,60 +85,26 @@ async function deploy(cmd = '', files = []) {
   console.log(chalk.magenta(`\n${figures.arrowUp}  Uploading to Shopify...\n`));
 
   try {
-    await promiseThemekitConfig();
-    await promiseThemekitDeploy(cmd, files);
+    await themekit.command("configure", _generateConfigFlags(), {
+      cwd: config.get("paths.theme.dist"),
+    });
+    await themekit.command(
+      "deploy",
+      {
+        ..._generateConfigFlags(cmd),
+        files,
+      },
+      {
+        cwd: config.get("paths.theme.dist"),
+      },
+    );
   } catch (error) {
-    console.error('My Error', error);
+    console.error("My Error", error);
   }
 
   deploying = false;
 
   return maybeDeploy;
-}
-
-function promiseThemekitConfig() {
-  return new Promise((resolve, reject) => {
-    themekit(
-      {
-        args: [
-          'configure',
-          ..._generateConfigFlags(),
-          ..._generateIgnoreFlags(),
-        ],
-        cwd: config.get('paths.theme.dist'),
-      },
-      (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      },
-    );
-  });
-}
-
-function promiseThemekitDeploy(cmd, files) {
-  return new Promise((resolve, reject) => {
-    themekit(
-      {
-        args: [
-          cmd,
-          '--no-update-notifier',
-          ..._generateConfigFlags(),
-          ...files,
-        ],
-        cwd: config.get('paths.theme.dist'),
-      },
-      (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      },
-    );
-  });
 }
 
 /**
@@ -158,19 +120,19 @@ function fetchMainThemeId() {
     https.get(
       {
         hostname: slateEnv.getStoreValue(),
-        path: '/admin/themes.json',
+        path: "/admin/themes.json",
         auth: `:${slateEnv.getPasswordValue}`,
         agent: false,
         headers: {
-          'X-Shopify-Access-Token': slateEnv.getPasswordValue(),
+          "X-Shopify-Access-Token": slateEnv.getPasswordValue(),
         },
       },
       (res) => {
-        let body = '';
+        let body = "";
 
-        res.on('data', (datum) => (body += datum));
+        res.on("data", (datum) => (body += datum));
 
-        res.on('end', () => {
+        res.on("end", () => {
           const parsed = JSON.parse(body);
 
           if (parsed.errors) {
@@ -179,7 +141,7 @@ function fetchMainThemeId() {
                 `API request to fetch main theme ID failed: \n${JSON.stringify(
                   parsed.errors,
                   null,
-                  '\t',
+                  "\t",
                 )}`,
               ),
             );
@@ -192,14 +154,14 @@ function fetchMainThemeId() {
                 `Shopify response for /admin/themes.json is not an array. ${JSON.stringify(
                   parsed,
                   null,
-                  '\t',
+                  "\t",
                 )}`,
               ),
             );
             return;
           }
 
-          const mainTheme = parsed.themes.find((t) => t.role === 'main');
+          const mainTheme = parsed.themes.find((t) => t.role === "main");
 
           if (!mainTheme) {
             reject(
@@ -207,7 +169,7 @@ function fetchMainThemeId() {
                 `No main theme in response. ${JSON.stringify(
                   parsed.themes,
                   null,
-                  '\t',
+                  "\t",
                 )}`,
               ),
             );
@@ -224,7 +186,7 @@ function fetchMainThemeId() {
 module.exports = {
   sync(files = []) {
     if (!files.length) {
-      return Promise.reject(new Error('No files to deploy.'));
+      return Promise.reject(new Error("No files to deploy."));
     }
 
     filesToDeploy = [...new Set([...filesToDeploy, ...files])];
@@ -233,11 +195,11 @@ module.exports = {
   },
 
   replace() {
-    return deploy('replace');
+    return deploy("replace");
   },
 
   upload() {
-    return deploy('upload');
+    return deploy("upload");
   },
 
   fetchMainThemeId,
