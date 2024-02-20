@@ -91,8 +91,6 @@ function event(name, payload = {}) {
       });
     };
   }
-
-  return axios('https://v.shopify.com/slate/track', axiosConfig);
 }
 
 module.exports = {
