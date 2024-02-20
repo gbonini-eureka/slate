@@ -10,7 +10,7 @@ const consoleControl = require('console-control-strings');
 const clearConsole = require('react-dev-utils/clearConsole');
 const ip = require('ip');
 const env = require('@shopify/slate-env');
-const {event} = require('@shopify/slate-analytics');
+const {event} = require('@gbonini-eureka/slate-analytics');
 const SlateConfig = require('@shopify/slate-config');
 
 const promptContinueIfPublishedTheme = require('../prompts/continue-if-published-theme');

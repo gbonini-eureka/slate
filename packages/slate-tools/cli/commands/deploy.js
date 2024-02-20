@@ -1,7 +1,7 @@
 const argv = require('minimist')(process.argv.slice(2));
 const chalk = require('chalk');
-const {event} = require('@shopify/slate-analytics');
-const {replace, upload} = require('@shopify/slate-sync');
+const {event} = require('@gbonini-eureka/slate-analytics');
+const {replace, upload} = require('gbonini-eureka/slate-sync');
 
 const packageJson = require('../../package.json');
 const promptContinueIfPublishedTheme = require('../prompts/continue-if-published-theme');

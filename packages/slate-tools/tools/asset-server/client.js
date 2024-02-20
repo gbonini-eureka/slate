@@ -1,5 +1,5 @@
 const {SyncHook, AsyncSeriesHook} = require('tapable');
-const {sync} = require('@shopify/slate-sync');
+const {sync} = require('@gbonini-eureka/slate-sync');
 
 module.exports = class Client {
   constructor(options) {

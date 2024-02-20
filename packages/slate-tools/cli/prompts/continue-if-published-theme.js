@@ -2,8 +2,8 @@
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const slateEnv = require('@shopify/slate-env');
-const {event} = require('@shopify/slate-analytics');
-const {fetchMainThemeId} = require('@shopify/slate-sync');
+const {event} = require('@gbonini-eureka/slate-analytics');
+const {fetchMainThemeId} = require('@gbonini-eureka/slate-sync');
 const figures = require('figures');
 const {argv} = require('yargs');
 
