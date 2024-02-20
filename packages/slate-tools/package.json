@@ -1,6 +1,6 @@
 {
   "name": "@gbonini-eureka/slate-tools",
-  "version": "1.0.0-beta.22",
+  "version": "1.0.0-beta.23",
   "description": "A modern development toolkit for Shopify themes",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "@shopify/slate-env": "1.0.0-beta.16",
     "@shopify/slate-liquid-asset-loader": "1.0.0-beta.11",
     "@shopify/slate-sections-plugin": "1.0.0-beta.19",
-    "@gbonini-eureka/slate-sync": "1.0.0-beta.17",
+    "@gbonini-eureka/slate-sync": "1.0.0-beta.18",
     "@shopify/slate-tag-webpack-plugin": "1.0.0-beta.14",
     "@shopify/slate-translations": "1.0.0-beta.19",
     "@shopify/theme-lint": "^2.0.0",
