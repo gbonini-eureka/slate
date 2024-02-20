@@ -1,6 +1,6 @@
 {
-  "name": "@shopify/slate-analytics",
-  "version": "1.0.0-beta.16",
+  "name": "@gbonini-eureka/slate-analytics",
+  "version": "1.0.0-beta.17",
   "description": "Slate's analytics controller and event emitter",
   "main": "index.js",
   "scripts": {
