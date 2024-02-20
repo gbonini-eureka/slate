@@ -1,26 +1,29 @@
 {
-  "name": "@shopify/slate-tools",
-  "version": "1.0.0-beta.19",
+  "name": "@gbonini-eureka/slate-tools",
+  "version": "1.0.0-beta.20",
   "description": "A modern development toolkit for Shopify themes",
-  "repository": "https://github.com/Shopify/slate/tree/1.x/packages/slate-tools",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shopify/slate/tree/1.x/packages/slate-tools"
+  },
   "license": "MIT",
   "author": "Shopify",
   "bugs": {
     "url": "https://github.com/Shopify/slate/issues"
   },
   "bin": {
-    "slate-tools": "./cli/index.js"
+    "slate-tools": "cli/index.js"
   },
   "engine": ">=8.9.4",
   "dependencies": {
     "@shopify/html-webpack-liquid-asset-tags-plugin": "1.0.0-beta.11",
-    "@shopify/slate-analytics": "1.0.0-beta.16",
+    "@gbonini-eureka/slate-analytics": "1.0.0-beta.17",
     "@shopify/slate-config": "1.0.0-beta.14",
     "@shopify/slate-cssvar-loader": "1.0.0-beta.16",
     "@shopify/slate-env": "1.0.0-beta.16",
     "@shopify/slate-liquid-asset-loader": "1.0.0-beta.11",
     "@shopify/slate-sections-plugin": "1.0.0-beta.19",
-    "@shopify/slate-sync": "1.0.0-beta.16",
+    "@gbonini-eureka/slate-sync": "1.0.0-beta.17",
     "@shopify/slate-tag-webpack-plugin": "1.0.0-beta.14",
     "@shopify/slate-translations": "1.0.0-beta.19",
     "@shopify/theme-lint": "^2.0.0",
@@ -90,5 +93,9 @@
   "publishConfig": {
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
+  },
+  "main": "slate-tools.schema.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

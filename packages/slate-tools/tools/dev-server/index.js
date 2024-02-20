@@ -36,6 +36,14 @@ class DevServer {
           },
         ],
       },
+       snippetOptions: {
+          rule: {
+              match: /<head[^>]*>/i,
+              fn: function(snippet, match) {
+                  return match + snippet;
+              }
+          }
+      },
       https: {key: getSSLKeyPath(), cert: getSSLCertPath()},
       logLevel: 'silent',
       socket: {
